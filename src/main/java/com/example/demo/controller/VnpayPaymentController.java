@@ -31,7 +31,7 @@ public class VnpayPaymentController {
 	public Map<String, String> createPayment(HttpServletRequest request, @RequestParam(name = "vnp_OrderInfo") String vnp_OrderInfo,
 			@RequestParam(name = "vnp_OrderType") String ordertype, @RequestParam(name = "vnp_Amount") Integer amount,
 			@RequestParam(name = "vnp_Locale") String language, @RequestParam(name = "vnp_BankCode", defaultValue = "") String bankcode) {
-		String vnp_Version = "2.0.0";
+		String vnp_Version = "2.1.0";
 		String vnp_Command = "pay";
 		String vnp_TxnRef = VnpayConfig.getRandomNumber(8);
 		String vnp_IpAddr = VnpayConfig.getIpAddress(request);
@@ -73,8 +73,8 @@ public class VnpayPaymentController {
 		StringBuilder query = new StringBuilder();
 		Iterator<String> itr = fieldNames.iterator();
 		while (itr.hasNext()) {
-			String fieldName = (String) itr.next();
-			String fieldValue = (String) vnp_Params.get(fieldName);
+			String fieldName = itr.next();
+			String fieldValue = vnp_Params.get(fieldName);
 			if ((fieldValue != null) && (fieldValue.length() > 0)) {
 				// Build hash data
 				hashData.append(fieldName);
@@ -99,17 +99,15 @@ public class VnpayPaymentController {
 
 		String queryUrl = query.toString();
 		String vnp_SecureHash = VnpayConfig.Sha256(VnpayConfig.vnp_HashSecret + hashData.toString());
-		// System.out.println("HashData=" + hashData.toString());
 		queryUrl += "&vnp_SecureHashType=SHA256&vnp_SecureHash=" + vnp_SecureHash;
 		String paymentUrl = VnpayConfig.vnp_PayUrl + "?" + queryUrl;
 		vnp_Params.put("redirect_url", paymentUrl);
-//		return "redirect:" + paymentUrl;
 		return vnp_Params;
 	}
 
-	
+
 	@GetMapping(value = "/result")
-	public Map<String, String> completePayment(HttpServletRequest request, 
+	public Map<String, String> completePayment(HttpServletRequest request,
 			@RequestParam(name = "vnp_OrderInfo") String vnp_OrderInfo,
 			@RequestParam(name = "vnp_Amount") Integer vnp_Amount,
 			@RequestParam(name = "vnp_BankCode", defaultValue = "") String vnp_BankCode,

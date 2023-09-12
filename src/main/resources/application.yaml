@@ -1,0 +1,10 @@
+server:
+  port: 9090
+  servlet:
+    context-path: /api
+paypal:
+  client:
+    id: HELLO
+    secret: askhdasjhdkIUHIUAH210291
+    mode: CreditCard
+

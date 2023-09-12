@@ -41,7 +41,7 @@ public class MomoPayController {
 	@PostMapping(value = "/create-order")
 	public Map<String, Object> createPayment(HttpServletRequest request, @RequestParam Long amount,
 			@RequestParam Long order_id)
-			throws InvalidKeyException, NoSuchAlgorithmException, ClientProtocolException, IOException {
+			throws InvalidKeyException, NoSuchAlgorithmException, IOException {
 		JSONObject json = new JSONObject();
 		String partnerCode = MomoConfig.PARTNER_CODE;
 		String accessKey = MomoConfig.ACCESS_KEY;
